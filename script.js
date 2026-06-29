@@ -322,8 +322,9 @@ form?.addEventListener("submit", (event) => {
         submit.disabled = false;
       }, 2600);
     });
+});
 
-  const toTopButton = document.querySelector(".to-top-button");
+const toTopButton = document.querySelector(".to-top-button");
   const updateToTopButton = () => {
     if (!toTopButton) return;
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
