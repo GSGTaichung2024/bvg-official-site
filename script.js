@@ -279,7 +279,7 @@ document.querySelectorAll(".client-logo img").forEach((image) => {
 updateCases();
 
 // Google Apps Script Web App 部署網址 (請在此替換為您的 Apps Script 網址)
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZMM6EjO8y59wPdCnGhIyUypH6FbE3wvvmMCK66-_UCVvgH8JqDDFkA77uoePKC93r/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzqX_1ob1wnI60-XPM9bGxB8tJlmbeSflsj9pmn91jPOu9UUIHFK7XlZx1TJgrvQ_af/exec";
 
 const form = document.getElementById("contactForm") || document.querySelector(".contact-form");
 form?.addEventListener("submit", (event) => {
