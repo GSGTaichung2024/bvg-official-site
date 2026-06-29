@@ -51,6 +51,7 @@ const logos = {
   糖鼎: "assets/client-logos/tangding.webp",
   錢老爺Line娛樂城: "assets/client-logos/qianlaoye.jpg",
   大頭仔Line娛樂城: "assets/client-logos/datouzai.jpg",
+  維德普: "assets/client-logos/virdep.webp",
   崴達: "assets/client-logos/virdep.webp",
   植沐: "assets/client-logos/huso.jpg",
   潔淨學長: "assets/client-logos/cleanology.jpg",
@@ -169,6 +170,60 @@ const collaborationMap = {
   簡單保養: ["電商運營部", "影音部"],
 };
 
+const caseLinks = {
+  魚饌食: "https://www.hamacen.tw/",
+  維克: "https://tw.virbac.com/",
+  潔淨學: "https://cleanologi.com/",
+  老媽拌麵: "https://www.laomanoodle.com.tw/",
+  漢來: "https://www.hilai-foods.com/",
+  花田囍彘: "https://www.huatian.com.tw/",
+  氣機科技: "https://aqive.app/",
+  飛航模飾: "https://www.pinkoi.com/store/flightmode",
+  新肌霓: "https://www.ingeni.com.tw/",
+  維格餅家: "https://www.vigorkobo.com/",
+  香雞城: "https://www.jgssg.com.tw/zh-tw",
+  簡單保養: "https://www.simplecare.com.tw/",
+  大武山雞蛋: "https://www.dawushan.com.tw/",
+  麗嬰房: "https://www.lesenphants.com.tw/",
+  三風製麵: "https://www.shanfeng.com.tw/",
+  geneoX: "https://www.geneox-taiwan.com/",
+  橘子工坊: "https://www.orangehouse.com.tw/",
+  歐買尬海鮮串燒: "https://www.facebook.com/OMGseafoodbbq/",
+  "BV 必維國際集團": "https://www.bureauveritas.com.tw/",
+  "幣託 X 全家": "https://www.bitopro.com/",
+  綠界大數據: "https://www.ecpay.com.tw/",
+  維德普: "https://virdep.com/",
+  Formosa7s: "https://www.formosasevens.com.tw/",
+  勝利聯賽: "https://www.victoryleague.com.tw/",
+  凡登西服: "https://www.vandome.com.tw/",
+  風動設計: "https://www.pneumatic-interior.com.tw/",
+  達爾文金融: "https://sd-bank.com/",
+
+  北歐櫥窗: "https://www.instagram.com/reel/C7T7t4DvS98/",
+  台北汎德: "https://www.facebook.com/reel/2644016859267332",
+  麻十七: "https://www.instagram.com/reel/CvzP_V3gExL/",
+  明粵火鍋: "https://www.facebook.com/reel/1171168844110233",
+  電商鐵軍理查: "https://www.instagram.com/reel/DHia4YMOo5C/",
+  "ONE RULE": "https://www.tiktok.com/@onerule_taipei/video/7349125088580570370",
+  深深愛上愛妮島: "https://www.facebook.com/reel/2477839239041444",
+  裕隆汽車慶通保修廠: "https://www.facebook.com/share/r/19KcJsCGFU/",
+  驊哥電腦: "https://www.instagram.com/reel/DCgw6NCvFIT/",
+  依汰抗菌專家: "https://www.facebook.com/Aether.com.tw/videos/937405094651061",
+  心茶: "https://www.youtube.com/shorts/P5pn3sWVGs4",
+  植沐: "https://www.instagram.com/reel/DMzuMutye5R/",
+  后里瘋馬戲: "https://www.instagram.com/reel/C4fm-7jxk-6/",
+  OK胡總: "https://www.tiktok.com/@winnerlife_914/video/7319099228335262982",
+  OK大小媽: "https://www.tiktok.com/@okbank.tw/video/7332771507309006082",
+  "CERALIV LUXURY": "https://www.instagram.com/reel/CsVxPz9pZZu/",
+  "EM STUDIO": "https://www.instagram.com/reel/C5S-P6aqB3Y/",
+  胡索: "https://www.tiktok.com/@sourcekohtalks/video/7382496217567153416",
+  娜姐教你穩穩貸: "https://www.tiktok.com/@winwinmoney88/video/7379469799971245329",
+  洪薇婷老師: "https://www.instagram.com/reel/Cyf7GxChqzR/",
+  糖鼎: "https://www.instagram.com/reel/C3SMzCLJBZR/",
+  "小食創合｜林彤": "https://www.instagram.com/reel/C4sp-sWy5by/",
+  營養師張語希: "https://www.instagram.com/reel/C5zvHQHBskP/",
+};
+
 const escapeHtml = (value) =>
   String(value).replace(/[&<>"']/g, (character) => ({
     "&": "&amp;",
@@ -189,8 +244,11 @@ const renderLogo = (item) => {
 
 const renderCase = (item) => {
   const departments = collaborationMap[item.name] || [departmentLabels[item.category]];
+  const link = caseLinks[item.name];
+  const tagName = link ? "a" : "article";
+  const linkAttributes = link ? ` href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer" aria-label="查看 ${escapeHtml(item.name)} 案例"` : "";
   return `
-    <article class="case-card" data-category="${item.category}" data-service="${escapeHtml(item.service)}">
+    <${tagName} class="case-card${link ? " case-link" : ""}" data-category="${item.category}" data-service="${escapeHtml(item.service)}"${linkAttributes}>
       ${renderLogo(item)}
       <div class="case-kicker">${escapeHtml(item.serviceLabel || item.service)} · ${escapeHtml(item.industry)}</div>
       <h3>${escapeHtml(item.name)}</h3>
@@ -200,7 +258,7 @@ const renderCase = (item) => {
         <span class="case-collab-label">協作部門</span>
         <div class="case-collab-tags">${departments.map((department) => `<span>${department}</span>`).join("")}</div>
       </div>
-    </article>
+    </${tagName}>
   `;
 };
 
