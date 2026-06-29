@@ -278,16 +278,48 @@ document.querySelectorAll(".client-logo img").forEach((image) => {
 
 updateCases();
 
-const form = document.querySelector(".contact-form");
+// Google Apps Script Web App 部署網址 (請在此替換為您的 Apps Script 網址)
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZMM6EjO8y59wPdCnGhIyUypH6FbE3wvvmMCK66-_UCVvgH8JqDDFkA77uoePKC93r/exec";
+
+const form = document.getElementById("contactForm") || document.querySelector(".contact-form");
 form?.addEventListener("submit", (event) => {
   event.preventDefault();
   const submit = form.querySelector("button[type='submit']");
-  submit.textContent = "已收到，我們會盡快聯繫您";
-  submit.disabled = true;
-  form.reset();
+  const originalText = submit.textContent;
 
-  window.setTimeout(() => {
-    submit.textContent = "提交諮詢";
-    submit.disabled = false;
-  }, 2600);
+  submit.textContent = "傳送中...";
+  submit.disabled = true;
+
+  // 收集表單欄位資料
+  const formData = new FormData(form);
+  const data = {};
+  formData.forEach((value, key) => {
+    data[key] = value;
+  });
+
+  // 發送 POST 請求至 Google Apps Script
+  // 使用 mode: 'no-cors' 以防 Apps Script 重新導向產生的 CORS 阻擋
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: new URLSearchParams(data).toString()
+  })
+    .then(() => {
+      // no-cors 模式下會返回 opaque response，我們直接視為成功並更新 UI
+      submit.textContent = "已收到，我們會盡快聯繫您";
+      form.reset();
+    })
+    .catch((error) => {
+      console.error("表單提交出錯:", error);
+      submit.textContent = "發送失敗，請稍後再試";
+    })
+    .finally(() => {
+      window.setTimeout(() => {
+        submit.textContent = originalText;
+        submit.disabled = false;
+      }, 2600);
+    });
 });
