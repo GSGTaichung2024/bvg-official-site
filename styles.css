@@ -746,6 +746,39 @@ textarea {
   filter: invert(1);
 }
 
+.to-top-button {
+  position: fixed;
+  right: clamp(18px, 3vw, 34px);
+  bottom: clamp(18px, 3vw, 34px);
+  z-index: 30;
+  min-width: 118px;
+  min-height: 46px;
+  padding: 12px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  color: var(--white);
+  background: rgba(31, 31, 31, 0.92);
+  box-shadow: 0 18px 44px rgba(31, 31, 31, 0.2);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.to-top-button.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.to-top-button:hover {
+  background: var(--black);
+}
+
 @media (max-width: 1040px) {
   .hero,
   .intro,
@@ -874,7 +907,6 @@ textarea {
   .service-grid,
   .department-grid,
   .diagnosis-grid,
-  .case-grid,
   .contact-form,
   .timeline li {
     grid-template-columns: 1fr;
@@ -934,9 +966,35 @@ textarea {
     flex: 0 0 auto;
   }
 
+  .case-grid {
+    display: flex;
+    grid-template-columns: none;
+    gap: 14px;
+    overflow-x: auto;
+    overflow-y: visible;
+    margin-left: -22px;
+    margin-right: -22px;
+    padding: 2px 48px 18px 22px;
+    scroll-padding-left: 22px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .case-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .case-grid::after {
+    content: "";
+    flex: 0 0 12px;
+  }
+
   .case-card {
+    flex: 0 0 min(82vw, 342px);
+    scroll-snap-align: start;
     padding: 132px 20px 22px;
-    min-height: auto;
+    min-height: 492px;
   }
 
   .case-card::before {
@@ -995,10 +1053,6 @@ textarea {
     font-size: 12px;
   }
 
-  .case-card {
-    min-height: 0;
-  }
-
   .contact-list li {
     grid-template-columns: 1fr;
     gap: 2px;
@@ -1014,5 +1068,14 @@ textarea {
 
   .footer img {
     width: 150px;
+  }
+
+  .to-top-button {
+    right: 16px;
+    bottom: 16px;
+    min-width: 104px;
+    min-height: 42px;
+    padding: 10px 14px;
+    font-size: 13px;
   }
 }

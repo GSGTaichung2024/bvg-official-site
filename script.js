@@ -322,4 +322,19 @@ form?.addEventListener("submit", (event) => {
         submit.disabled = false;
       }, 2600);
     });
-});
+
+  const toTopButton = document.querySelector(".to-top-button");
+  const updateToTopButton = () => {
+    if (!toTopButton) return;
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const nearBottom = scrollable > 0 && scrollTop / scrollable > 0.72;
+    toTopButton.classList.toggle("visible", scrollTop > 900 || nearBottom);
+  };
+
+  window.addEventListener("scroll", updateToTopButton, { passive: true });
+  window.addEventListener("resize", updateToTopButton);
+  toTopButton?.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  updateToTopButton();
