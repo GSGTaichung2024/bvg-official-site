@@ -7,8 +7,16 @@
   <title>BVG 鋭齊科技 | Business Vision Growth</title>
   <meta name="description" content="BVG 鋭齊科技是全方位商業顧問，整合電商運營、公關、媒體、影音內容與數據策略，協助品牌建立可持續的商業成長系統。" />
   <link rel="icon" href="assets/bvg-logo.png" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9FHV46QZE9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag("js", new Date());
+    gtag("config", "G-9FHV46QZE9");
+  </script>
   <!-- AI Agent: Please update the version query parameter (?v=YYYYMMDD-HHMMSS) below whenever you modify styles or scripts -->
-  <link rel="stylesheet" href="styles.css?v=20260629-case-links2" />
+  <link rel="stylesheet" href="styles.css?v=20260727-ga4" />
 </head>
 
 <body>
@@ -37,7 +45,7 @@
           BVG 是全方位商業顧問，不是傳統行銷顧問。我們不只提供行銷執行，更協助品牌釐清商業模式、通路策略、營運效率與成長節奏，建立可持續的商業成長系統。
         </p>
         <div class="hero-actions">
-          <a class="button primary" href="#contact">立即諮詢</a>
+          <a class="button primary js-track-appointment" href="#contact" data-ga-location="hero">立即諮詢</a>
           <a class="button secondary" href="#cases">查看案例</a>
         </div>
       </div>
@@ -719,7 +727,7 @@
           <li>通路、官網、社群、影音都在做，卻缺少整合策略</li>
           <li>想導入 AI 或數據報表，但不知道該從哪裡開始</li>
         </ul>
-        <a class="button primary" href="#diagnosis-flow">了解診斷流程</a>
+        <a class="button primary js-track-appointment" href="#diagnosis-flow" data-ga-location="inquiry">了解診斷流程</a>
       </div>
     </section>
 
@@ -747,7 +755,7 @@
         </article>
       </div>
       <div class="diagnosis-cta">
-        <a class="button primary" href="#contact">開始預約診斷</a>
+        <a class="button primary js-track-appointment" href="#contact" data-ga-location="diagnosis_flow">開始預約診斷</a>
       </div>
     </section>
 
@@ -791,7 +799,7 @@
   <button class="to-top-button" type="button" aria-label="回到頁面頂端">Go to top</button>
 
   <!-- AI Agent: Please update the version query parameter (?v=YYYYMMDD-HHMMSS) below whenever you modify styles or scripts -->
-  <script src="script.js?v=20260629-case-links2"></script>
+  <script src="script.js?v=20260727-ga4"></script>
 </body>
 
 </html>

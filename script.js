@@ -336,6 +336,21 @@ document.querySelectorAll(".client-logo img").forEach((image) => {
 
 updateCases();
 
+const trackGaEvent = (eventName, parameters = {}) => {
+  if (typeof window.gtag !== "function") return;
+  window.gtag("event", eventName, parameters);
+};
+
+document.querySelectorAll(".js-track-appointment").forEach((element) => {
+  element.addEventListener("click", () => {
+    trackGaEvent("appointment_click", {
+      event_category: "engagement",
+      event_label: element.textContent.trim(),
+      location: element.dataset.gaLocation || "unknown",
+    });
+  });
+});
+
 // Google Apps Script Web App 部署網址 (請在此替換為您的 Apps Script 網址)
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzqX_1ob1wnI60-XPM9bGxB8tJlmbeSflsj9pmn91jPOu9UUIHFK7XlZx1TJgrvQ_af/exec";
 
@@ -347,6 +362,10 @@ form?.addEventListener("submit", (event) => {
 
   submit.textContent = "傳送中...";
   submit.disabled = true;
+  trackGaEvent("generate_lead", {
+    event_category: "conversion",
+    event_label: "contact_form_submit",
+  });
 
   // 收集表單欄位資料
   const formData = new FormData(form);
