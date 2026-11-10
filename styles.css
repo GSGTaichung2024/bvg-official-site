@@ -181,6 +181,24 @@ h3 {
   font-size: clamp(17px, 2vw, 21px);
 }
 
+.service-detail-link { display: inline-block; color: var(--ink); font-size: 14px; font-weight: 800; margin-top: 8px; text-underline-offset: 4px; }
+.method-link { color: var(--white); font-weight: 800; text-underline-offset: 4px; }
+.faq-list { max-width: 860px; margin: 0 auto; }
+.faq-list details { border-top: 1px solid var(--line); padding: 20px 0; }
+.faq-list details:last-child { border-bottom: 1px solid var(--line); }
+.faq-list summary { cursor: pointer; font-size: 18px; font-weight: 800; }
+.faq-list p { color: var(--muted); }
+.service-page { max-width: 960px; margin: 0 auto; padding: 110px 24px 80px; }
+.service-page h1 { max-width: 850px; font-size: clamp(36px, 5vw, 56px); }
+.service-page .service-lead { font-size: 21px; line-height: 1.7; max-width: 780px; }
+.service-page section { border-top: 1px solid var(--line); padding: 34px 0; }
+.service-page section h2 { font-size: 26px; }
+.service-page section p, .service-page li { line-height: 1.8; }
+.service-page li + li { margin-top: 8px; }
+.service-related { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 40px; }
+.service-related a { color: var(--ink); font-weight: 800; text-underline-offset: 4px; }
+.service-page a:not(.button):not(.brand):hover { text-decoration: underline; }
+
 .hero-actions {
   display: flex;
   gap: 14px;
@@ -399,6 +417,10 @@ h3 {
   gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 24px;
+}
+
+.case-toolbar[hidden] {
+  display: none;
 }
 
 .service-toolbar {
@@ -816,6 +838,21 @@ textarea {
 }
 
 @media (max-width: 760px) {
+  body:has(.service-page) .site-header { flex-wrap: wrap; gap: 0; }
+  body:has(.service-page) .site-nav {
+    position: static;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 4px 0 0;
+    border: 0;
+    box-shadow: none;
+    font-size: 13px;
+  }
+  body:has(.service-page) .site-nav a { padding: 8px 0; }
+  .service-page { padding: 54px 22px 70px; }
+  .service-page .service-lead { font-size: 18px; }
   .site-header {
     min-height: 70px;
     padding: 10px 18px;

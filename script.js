@@ -89,7 +89,7 @@ const wideLogos = new Set([
 ]);
 
 const cases = [
-  { category: "ecommerce", service: "電商全代操", name: "魚饌食", industry: "食品", summary: "優化官網體驗，以禮盒節慶行銷提高客單，搭配 Meta 精準投放與 KOL 開箱。", metrics: [["網站流量", "成長 150%"], ["轉換率", "提升 45%"], ["銷售表現", "成長 120%"]] },
+  { category: "ecommerce", service: "電商全代操", name: "魚饌食", industry: "食品", summary: "優化官網體驗，規劃節慶禮盒內容，並整合廣告與 KOL 合作，串接品牌曝光和電商轉換。", metrics: [["服務內容", "官網優化"], ["行銷規劃", "節慶禮盒"], ["跨部門協作", "廣告 × 公關"]] },
   { category: "ecommerce", service: "電商全代操", name: "維克", industry: "寵物", summary: "強化獸醫師推薦與知識型內容，統一旗艦店定價策略，建立專業信任與品牌溫度。", metrics: [["品牌信任度", "提升 40%"], ["回購率", "提升 55%"], ["客單價", "提升 30%"]] },
   { category: "ecommerce", service: "電商全代操", serviceLabel: "電商全代操 × 短影音", name: "潔淨學", industry: "清潔用品", summary: "整合電商營運、成分透明化敘事與短影音實測，搭配訂閱機制提升新客、品牌搜尋與產品轉換。", metrics: [["新客獲取", "成長 80%"], ["品牌搜尋", "成長 60%"], ["短影音成果", "最高 20.2 萬觀看"]] },
   { category: "ecommerce", service: "電商全代操", serviceLabel: "電商全代操 × 網紅行銷", name: "老媽拌麵", industry: "食品", summary: "全代操官網並建立品牌數位資產，整合 CRM、廣告與海外網紅布局，推動會員及市場能見度成長。", metrics: [["服務範圍", "官網 × CRM"], ["海外布局", "3 個市場"], ["網紅合作", "共 35 位"]] },
@@ -266,41 +266,45 @@ const caseGrid = document.querySelector("#case-grid");
 const serviceToolbar = document.querySelector("#service-toolbar");
 caseGrid.innerHTML = cases.map(renderCase).join("");
 
-const serviceOrder = [
-  "電商全代操", "品牌成長顧問", "通路代運營", "全代操", "momo營運", "通路營運",
-  "媒體公關", "媒體公關 × 網紅行銷", "網紅行銷", "社群口碑", "實體活動策劃執行",
-  "廣告投放", "網站製作", "短影音", "短影音 × 直播", "短影音 × Podcast",
-  "商品攝影", "短影音 × 直播剪輯", "短影音 × 商品攝影", "音樂 MV 剪輯",
-];
-
-serviceToolbar.innerHTML = [
-  '<button class="active" data-service-filter="all" type="button">全部服務</button>',
-  ...serviceOrder.map((service) => `<button data-service-filter="${escapeHtml(service)}" type="button">${escapeHtml(service)}</button>`),
-].join("");
+const serviceGroups = {
+  ecommerce: [
+    { id: "operations", label: "代營運", services: ["電商全代操", "全代操", "momo營運"] },
+    { id: "consulting", label: "成長顧問", services: ["品牌成長顧問"] },
+    { id: "channels", label: "通路營運", services: ["通路代運營", "通路營運"] },
+  ],
+  pr: [
+    { id: "reputation", label: "媒體與口碑", services: ["媒體公關", "媒體公關 × 網紅行銷", "社群口碑"] },
+    { id: "creators", label: "創作者合作", services: ["網紅行銷"] },
+    { id: "events", label: "活動策劃", services: ["實體活動策劃執行"] },
+  ],
+  media: [
+    { id: "ads", label: "廣告投放", services: ["廣告投放"] },
+    { id: "websites", label: "網站建置", services: ["網站製作"] },
+  ],
+  video: [
+    { id: "short-video", label: "短影音", services: ["短影音", "短影音 × 直播", "短影音 × Podcast", "短影音 × 直播剪輯", "短影音 × 商品攝影"] },
+    { id: "production", label: "其他影像製作", services: ["商品攝影", "音樂 MV 剪輯"] },
+  ],
+};
 
 const filters = document.querySelectorAll("[data-filter]");
-const serviceFilters = document.querySelectorAll("[data-service-filter]");
 const cards = document.querySelectorAll(".case-card");
 let activeDepartment = "all";
 let activeService = "all";
 
 const updateCases = () => {
+  const groups = serviceGroups[activeDepartment] || [];
+  const selectedGroup = groups.find((group) => group.id === activeService);
+  serviceToolbar.hidden = groups.length === 0;
+  serviceToolbar.innerHTML = groups.length ? [
+    `<button class="${activeService === "all" ? "active" : ""}" data-service-filter="all" type="button" aria-pressed="${activeService === "all"}">全部類型</button>`,
+    ...groups.map((group) => `<button class="${activeService === group.id ? "active" : ""}" data-service-filter="${group.id}" type="button" aria-pressed="${activeService === group.id}">${group.label}</button>`),
+  ].join("") : "";
+
   cards.forEach((card) => {
     const departmentMatch = activeDepartment === "all" || card.dataset.category === activeDepartment;
-    const serviceMatch = activeService === "all" || card.dataset.service === activeService;
+    const serviceMatch = activeService === "all" || selectedGroup?.services.includes(card.dataset.service);
     card.classList.toggle("hidden", !(departmentMatch && serviceMatch));
-  });
-
-  const availableServices = new Set(
-    [...cards]
-      .filter((card) => activeDepartment === "all" || card.dataset.category === activeDepartment)
-      .map((card) => card.dataset.service)
-      .filter(Boolean)
-  );
-
-  serviceFilters.forEach((button) => {
-    const service = button.dataset.serviceFilter;
-    button.hidden = service !== "all" && (activeDepartment === "all" || !availableServices.has(service));
   });
 };
 
@@ -308,20 +312,20 @@ filters.forEach((button) => {
   button.addEventListener("click", () => {
     filters.forEach((item) => item.classList.remove("active"));
     button.classList.add("active");
+    filters.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
     activeDepartment = button.dataset.filter;
     activeService = "all";
-    serviceFilters.forEach((item) => item.classList.toggle("active", item.dataset.serviceFilter === "all"));
     updateCases();
+    caseGrid.scrollLeft = 0;
   });
 });
 
-serviceFilters.forEach((button) => {
-  button.addEventListener("click", () => {
-    serviceFilters.forEach((item) => item.classList.remove("active"));
-    button.classList.add("active");
-    activeService = button.dataset.serviceFilter;
-    updateCases();
-  });
+serviceToolbar.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-service-filter]");
+  if (!button) return;
+  activeService = button.dataset.serviceFilter;
+  updateCases();
+  caseGrid.scrollLeft = 0;
 });
 
 document.querySelectorAll(".client-logo img").forEach((image) => {
@@ -336,9 +340,25 @@ document.querySelectorAll(".client-logo img").forEach((image) => {
 
 updateCases();
 
+const requestedDepartment = new URLSearchParams(window.location.search).get("department");
+if (["ecommerce", "pr", "media", "video"].includes(requestedDepartment)) {
+  document.querySelector(`[data-filter="${requestedDepartment}"]`)?.click();
+}
+
+document.querySelectorAll("[data-service-link]").forEach((link) => {
+  link.addEventListener("click", () => {
+    document.querySelector(`[data-filter="${link.dataset.serviceLink}"]`)?.click();
+  });
+});
+
 const trackGaEvent = (eventName, parameters = {}) => {
   if (typeof window.gtag !== "function") return;
   window.gtag("event", eventName, parameters);
+};
+
+const trackMetaEvent = (eventName, parameters = {}) => {
+  if (typeof window.fbq !== "function") return;
+  window.fbq("track", eventName, parameters);
 };
 
 document.querySelectorAll(".js-track-appointment").forEach((element) => {
@@ -347,6 +367,21 @@ document.querySelectorAll(".js-track-appointment").forEach((element) => {
       event_category: "engagement",
       event_label: element.textContent.trim(),
       location: element.dataset.gaLocation || "unknown",
+    });
+    trackMetaEvent("Contact", {
+      content_name: element.textContent.trim(),
+      location: element.dataset.gaLocation || "unknown",
+    });
+  });
+});
+
+document.querySelectorAll('a[href^="tel:"], a[href^="mailto:"]').forEach((element) => {
+  element.addEventListener("click", () => {
+    trackGaEvent("contact_link_click", {
+      method: element.href.startsWith("tel:") ? "phone" : "email",
+    });
+    trackMetaEvent("Contact", {
+      content_name: element.href.startsWith("tel:") ? "phone" : "email",
     });
   });
 });
@@ -362,10 +397,7 @@ form?.addEventListener("submit", (event) => {
 
   submit.textContent = "傳送中...";
   submit.disabled = true;
-  trackGaEvent("generate_lead", {
-    event_category: "conversion",
-    event_label: "contact_form_submit",
-  });
+  trackGaEvent("contact_form_submit_attempt");
 
   // 收集表單欄位資料
   const formData = new FormData(form);
@@ -386,7 +418,9 @@ form?.addEventListener("submit", (event) => {
   })
     .then(() => {
       // no-cors 模式下會返回 opaque response，我們直接視為成功並更新 UI
-      submit.textContent = "已收到，我們會盡快聯繫您";
+      // An opaque response cannot confirm server-side receipt.
+      trackGaEvent("contact_form_request_sent");
+      submit.textContent = "已送出，請留意回覆";
       form.reset();
     })
     .catch((error) => {
